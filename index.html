@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Dynamic Tumblr</title>
+    <!-- <link rel="shortcut icon" href="https://www.dropbox.com/s/nd7nakaetcn8vqa/45white.png?dl=1" type="image/x-icon"> -->
+    <link rel="shortcut icon"
+        href="https://cdn.filestackcontent.com/security=policy:eyJjYWxsIjpbInJlYWQiLCJjb252ZXJ0Iiwic3RvcmUiLCJwaWNrIl0sImV4cGlyeSI6MTU4MDg5OTEwMX0=,signature:bf1fe1754bd927647a64ceed61a847fc9fc87b12e2937f821ff07ea254775072/tHLIgJy5QWKOJcwB6aSQ"
+        type="image/x-icon">
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="src/style.css">
+
+    <script id="api_dynamic"></script>
+    <script id="api_static"></script>
+    <script defer src="src/script.js"></script>
+
+
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-primary navbar-expand-sm sticky-top">
+        <div class="container-fluid">
+            <div class="navbar col text-light">
+                <div>
+                    <img id="icon" src="https://www.dropbox.com/s/issnj1y4v6egpd7/Artboard%201%402x.png?dl=1" />
+                </div>
+                <div>
+                    <h4>Section ID - <span id="thisSectionID"></span></h4>
+                </div>
+                <div>
+                    <h4>Context - <span id="thisContext"></span></h4>
+                </div>
+                <h4 id="thisData"></h4>
+                <h4 id="thisContextLang"></h4>
+                <div>
+                    <h4>Script version - <span id="thisScriptVersion"></span></h4>
+                </div>
+                <div>
+                    <h4>DY ID - <span id="dyid"></span></h4>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid row">
+        <aside class="col">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h4>Change Section</h4>
+                    <form name="ChangeSection" class="form-group ">
+                        <h5 class="pt-4">New Section</h5>
+                        <input type="text" name="sectionID" placeholder="Section ID"
+                            class="form-control input-group input-group-sm mb-2" required />
+                        <select class="form-control" id="locationDD" name="location">
+                            <option id="us" value="us">US</option>
+                            <option id="eu" value="eu">EU</option>
+                        </select>
+
+                        <input type="submit" value="Change" id="changeSection"
+                            class="btn btn-outline-primary btn-sm btn-block mt-2" />
+                        <br />
+                        <small class="form-text">* Clear your cookies between sections</small>
+                    </form>
+
+                    <form class="form-group" name="context">
+                        <h4>Change Context</h4>
+
+                        <h5 class="pt-4">Context</h5>
+                        <select class="form-control" id="contextDD" name="context">
+                            <option id="HOMEPAGE" value="HOMEPAGE">HOMEPAGE</option>
+                            <option id="PRODUCT" value="PRODUCT">PRODUCT</option>
+                            <option id="CATEGORY" value="CATEGORY">CATEGORY</option>
+                            <option id="CART" value="CART">CART</option>
+                            <option id="OTHER" value="OTHER">OTHER</option>
+                        </select>
+                        <span id="sku_conteiner" style="display: none">
+                            <h5 class="pt-4 ">Data</h5>
+                            <div class="input-group input-group-sm mb-2">
+                                <input type="text" name="SKU" placeholder="SKU, SKU"
+                                    class="form-control input-sm " /><br />
+                            </div>
+                        </span>
+                        <input type="submit" value="Change Context" id="changeContext"
+                            class="btn btn-outline-primary btn-sm btn-block mt-2" />
+                    </form>
+                    <form name="ChangeLng" class="form-group ">
+                        <h5 class="pt-4">Change Language Context</h5>
+                        <input type="text" name="lngId" id="lngId" placeholder="en_GB"
+                            class="form-control input-group input-group-sm mb-2" required />
+                        <input type="submit" value="Change" id="changeLngButton"
+                            class="btn btn-outline-primary btn-sm btn-block mt-2" />
+                    </form>
+                    <section>
+                        <h4 class="mt-2">Audiences</h4>
+                        <div id="printAudiences"></div>
+                    </section>
+                </div>
+            </div>
+        </aside>
+        <section class="container mt-4 col-8 ">
+            <div class="container mt-5 row text-justify">
+                <div class="col">
+                    <h3>Lorem, ipsum dolor.</h3>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt
+                        obcaecati id dicta, reprehenderit itaque et aut numquam mollitia
+                        tempora quas dolore tenetur quidem quibusdam maxime fugiat ullam
+                        sit vel beatae corporis corrupti? Totam tempora saepe, blanditiis
+                        quae fugiat aliquid accusantium reiciendis error id odio ea
+                        tempore exercitationem natus nobis dolore sequi
+                    </p>
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Text Compare</h5>
+                                    <p class="card-text">
+                                        dolor sit amet consectetur adipisicing elit. Adipisci,
+                                        enim. content.
+                                    </p>
+                                    <a href="https://text-compare.com/" class="btn btn-primary" target="_blank"
+                                        rel="Text Compare">Text Compare</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">JSON Parser</h5>
+                                    <p class="card-text">
+                                        dolor sit amet consectetur adipisicing elit. Adipisci,
+                                        enim. content.
+                                    </p>
+                                    <a href="http://json.parser.online.fr/" class="btn btn-primary" target="_blank"
+                                        rel="JSON Parser">JSON Parser</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>
+                        velit enim aspernatur commodi eaque similique et! Dolorem
+                        similique rem eius veniam magni porro autem. Porro quaerat enim
+                        reiciendis. Consectetur impedit accusamus amet blanditiis veniam
+                        soluta eius, quae perferendis cumque expedita molestiae quod
+                        ratione quisquam a voluptates. Delectus, dignissimos maxime,
+                        laborum rem hic dolorum omnis debitis reiciendis sapiente mollitia
+                        autem consectetur corporis voluptas iste at voluptatum temporibus
+                        ipsum perspiciatis excepturi
+                    </p>
+                    <p>
+                        quod, obcaecati nihil a quasi! Voluptatem natus hic esse officiis
+                        saepe nemo maxime recusandae iure deleniti explicabo similique at
+                        quia praesentium, ipsam ea illum assumenda beatae quo earum vel
+                        dolor a voluptatum molestias non! Veritatis suscipit dicta aut qui
+                        deserunt perferendis eius, repellendus animi expedita accusantium
+                        maiores voluptates sapiente libero ullam dolorum
+                    </p>
+                    <p>
+                        incidunt quam distinctio provident dignissimos! Reprehenderit,
+                        fugit tempore, non sapiente impedit eos libero eligendi odio quia,
+                        quod itaque porro temporibus officia cupiditate earum voluptates?
+                        Molestiae placeat optio delectus nihil explicabo, quos reiciendis
+                        voluptatem libero aspernatur atque eveniet!
+                    </p>
+                    <div class="text-center">
+                        <div class="card-deck card-sm mt-5 col-12 ">
+                            <div class="row">
+                                <div class="card col" style="width: 18rem;">
+                                    <img class="card-img-top"
+                                        src="https://avatarfiles.alphacoders.com/139/thumb-13900.gif"
+                                        alt="Card image cap" />
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            Some quick example text to build on the card title and
+                                            make up the bulk of the card's content.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card col" style="width: 18rem;">
+                                    <img class="card-img-top" src="https://www.phpbb.com/customise/db/download/133111"
+                                        alt="Card image cap" data-dy-unit="Dynamictumblr-Unit" />
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            Some quick example text to build on the card title and
+                                            make up the bulk of the card's content.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="card col" style="width: 18rem;">
+                                    <img class="card-img-top"
+                                        src="https://store.playstation.com/store/api/chihiro/00_09_000/container/IL/en/999/EP0149-CUSA09988_00-AV00000000000004/1553541605000/image?w=100&h=100&bg_color=000000&opacity=100&_version=00_09_000"
+                                        alt="Card image cap" />
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            Some quick example text to build on the card title and
+                                            make up the bulk of the card's content.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="pt-5">Lorem ipsum dolor sit amet.</h3>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi,
+                        fuga alias. Distinctio quaerat eligendi dolor consectetur
+                        explicabo, id minus fugiat?
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque est
+                        quia sed maxime modi sint aperiam architecto, dolorum molestiae ut
+                        vero voluptatibus facere aut quidem debitis autem possimus nam
+                        nobis.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, dolor
+                        corrupti? Dignissimos officiis provident, est cumque animi
+                        delectus doloribus, quas voluptatibus mollitia corrupti saepe
+                        ullam quos accusamus non? Nihil doloribus sint accusamus esse,
+                        tempora enim.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti
+                        asperiores tenetur iure nostrum blanditiis, nemo nobis id
+                        quibusdam dignissimos sunt eveniet ullam optio laudantium velit
+                        iste quisquam aspernatur nihil rerum beatae incidunt dolores.
+                        Amet, sunt.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi,
+                        fuga alias. Distinctio quaerat eligendi dolor consectetur
+                        explicabo, id minus fugiat?
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque est
+                        quia sed maxime modi sint aperiam architecto, dolorum molestiae ut
+                        vero voluptatibus facere aut quidem debitis autem possimus nam
+                        nobis.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, dolor
+                        corrupti? Dignissimos officiis provident, est cumque animi
+                        delectus doloribus, quas voluptatibus mollitia corrupti saepe
+                        ullam quos accusamus non? Nihil doloribus sint accusamus esse,
+                        tempora enim.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti
+                        asperiores tenetur iure nostrum blanditiis, nemo nobis id
+                        quibusdam dignissimos sunt eveniet ullam optio laudantium velit
+                        iste quisquam aspernatur nihil rerum beatae incidunt dolores.
+                        Amet, sunt.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi,
+                        fuga alias. Distinctio quaerat eligendi dolor consectetur
+                        explicabo, id minus fugiat?
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque est
+                        quia sed maxime modi sint aperiam architecto, dolorum molestiae ut
+                        vero voluptatibus facere aut quidem debitis autem possimus nam
+                        nobis.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, dolor
+                        corrupti? Dignissimos officiis provident, est cumque animi
+                        delectus doloribus, quas voluptatibus mollitia corrupti saepe
+                        ullam quos accusamus non? Nihil doloribus sint accusamus esse,
+                        tempora enim.
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti
+                        asperiores tenetur iure nostrum blanditiis, nemo nobis id
+                        quibusdam dignissimos sunt eveniet ullam optio laudantium velit
+                        iste quisquam aspernatur nihil rerum beatae incidunt dolores.
+                        Amet, sunt.
+                    </p>
+                </div>
+                <div id="snackbar"></div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div id="thisIsDiv01">#div1</div>
+                    <div id="thisIsDiv02">#div2</div>
+                    <div id="thisIsDiv03">#div3</div>
+                    <div id="thisIsDiv04">#div4</div>
+                    <div id="thisIsDiv05">#div5</div>
+                    <div id="thisIsDiv06">#div6</div>
+                    <div id="thisIsDiv07">#div7</div>
+                    <div id="thisIsDiv08">#div8</div>
+                    <div id="thisIsDiv09">#div9</div>
+                    <div id="thisIsDiv10">#div10</div>
+                    <div id="thisIsDiv11">#div11</div>
+                    <div id="thisIsDiv12">#div12</div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <footer class="page-footer font-small blue pt-4 mt-5 col" style="color:#fff">
+                <div class="footer-copyright text-center py-3">
+                    © 2019 Copyright: Tzahi Tamam
+                </div>
+            </footer>
+            <!-- Footer -->
+        </section>
+
+        <aside class="col">
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h4 class="mt-2">Events</h4>
+                    <form name="purchase" class="">
+                        <h5 class="pt-4">Purchase</h5>
+
+                        <input type="text" name="product01" placeholder="SKU, SKU"
+                            class="form-control input-group input-group-sm mb-2" required />
+
+                        <input type="submit" value="Purchase" id="purchase"
+                            class="btn btn-outline-primary btn-sm btn-block" />
+                    </form>
+
+                    <form name="addToCart">
+                        <h5 class="pt-4">Add To Cart</h5>
+                        <input type="text" name="product02" placeholder="SKU, SKU"
+                            class="form-control input-group input-group-sm mb-2" required />
+
+                        <input type="submit" value="Add To Cart" id="addToCart"
+                            class="btn btn-outline-primary btn-sm btn-block" />
+                    </form>
+
+                    <form class="form-group" name="Login">
+                        <h5 class="pt-4">Login</h5>
+                        <select class="form-control mb-2" name="type">
+                            <option value="email">Email</option>
+                            <option value="he">Hashed Email</option>
+                            <option value="id">ID</option>
+                        </select>
+                        <input type="text" name="cuid" placeholder="CUID"
+                            class="form-control input-group input-group-sm mb-2" required />
+                        <input type="submit" value="Login" id="logIn"
+                            class="btn btn-outline-primary btn-sm btn-block" />
+                    </form>
+
+                    <form name="optIn">
+                        <h5 class="">Opt In</h5>
+                        <!-- <div class="input-group input-group-sm mb-2"> -->
+                        <input type="email" name="email" id="optInEmail" placeholder="Email"
+                            class="form-control input-group input-group-sm mb-2" required />
+                        <!-- </div> -->
+                        <input type="submit" value="Opt In" id="sendOptIn"
+                            class="btn btn-outline-primary btn-sm btn-block" />
+                    </form>
+
+                    <form name="optOut">
+                        <h5 class="pt-4">Opt Out</h5>
+                        <input type="email" name="email" id="optOutEmail" placeholder="Email"
+                            class="form-control input-group input-group-sm mb-2" required />
+                        <input type="submit" value="Opt Out" id="sendOptOut"
+                            class="btn btn-outline-primary btn-sm btn-block" />
+                    </form>
+                </div>
+            </div>
+        </aside>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+
+</body>
+
+</html>
