@@ -6,7 +6,7 @@
   "homepage": "https://tzahita.github.io/gvtDT/",
   "main": "site/index.html",
   "scripts": {
-    "start": "live-server --open='./site'",
+    "start": "live-server --open=site --port=5000",
     "deploy": "gh-pages -d site"
   },
   "repository": {
