@@ -1,0 +1,25 @@
+{
+  "name": "gvt-dt",
+  "version": "1.0.0",
+  "description": "Test website",
+  "keywords": [],
+  "homepage": "https://tzahita.github.io/gvtDT/",
+  "main": "site/index.html",
+  "scripts": {
+    "start": "live-server --open='./site'",
+    "deploy": "gh-pages -d site"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tzahita/gvtDT.git"
+  },
+  "author": "Tzahi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tzahita/gvtDT/issues"
+  },
+  "dependencies": {
+    "gh-pages": "^2.2.0",
+    "live-server": "^1.2.1"
+  }
+}
