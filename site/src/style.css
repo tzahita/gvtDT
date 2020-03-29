@@ -1,9 +1,9 @@
 :root {
-  --buttons-color: #007bff;
-  --primary-color: #ffffff;
-  --secondary-color: #007bff;
+  --buttons-color: #1bbc9b;
+  --primary-color: #2d3e50;
+  --secondary-color: #475f79;
   --border-color: rgba(173, 165, 165, 0.493);
-  --text-color: #000000;
+  --text-color: #ffffff;
 }
 
 body {

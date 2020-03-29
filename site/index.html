@@ -5,7 +5,7 @@
     <!-- <link rel="shortcut icon" href="https://www.dropbox.com/s/nd7nakaetcn8vqa/45white.png?dl=1" type="image/x-icon"> -->
     <link
       rel="shortcut icon"
-      href="https://cdn.filestackcontent.com/security=policy:eyJjYWxsIjpbInJlYWQiLCJjb252ZXJ0Iiwic3RvcmUiLCJwaWNrIl0sImV4cGlyeSI6MTU4MDg5OTEwMX0=,signature:bf1fe1754bd927647a64ceed61a847fc9fc87b12e2937f821ff07ea254775072/tHLIgJy5QWKOJcwB6aSQ"
+      href="pics/Artboard 1@2x.png"
       type="image/x-icon"
     />
 
@@ -34,16 +34,41 @@
     <script id="api_dynamic"></script>
     <script id="api_static"></script>
     <script defer src="src/script.js"></script>
+
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-K8QC4P7");
+    </script>
+    <!-- End Google Tag Manager -->
   </head>
 
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-K8QC4P7"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <nav class="navbar navbar-dark navbar-expand-sm sticky-top">
       <div class="container-fluid">
         <div class="navbar col text-light">
           <div>
             <img
               id="icon"
-              src="https://www.dropbox.com/s/issnj1y4v6egpd7/Artboard%201%402x.png?dl=1"
+              src="pics/Artboard 1@2x.png"
             />
           </div>
           <div>
@@ -75,13 +100,14 @@
                 type="text"
                 name="sectionID"
                 placeholder="Section ID"
+                id="section_id"
                 class="form-control input-group input-group-sm mb-2"
                 required
               />
-              <select class="form-control" id="locationDD" name="location">
+              <!-- <select class="form-control" id="locationDD" name="location">
                 <option id="us" value="us">US</option>
                 <option id="eu" value="eu">EU</option>
-              </select>
+              </select> -->
 
               <input
                 type="submit"
@@ -164,17 +190,18 @@
               <div class="col-sm-6">
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">Text Compare</h5>
+                    <h5 class="card-title">Light Mode</h5>
                     <p class="card-text">
                       dolor sit amet consectetur adipisicing elit. Adipisci,
                       enim. content.
                     </p>
+
                     <a
-                      href="https://text-compare.com/"
+                      href="http://json.parser.online.fr/"
                       class="btn btn-primary"
                       target="_blank"
-                      rel="Text Compare"
-                      >Text Compare</a
+                      rel="JSON Parser"
+                      >JSON Parser</a
                     >
                   </div>
                 </div>
@@ -370,7 +397,7 @@
           style="color:#fff"
         >
           <div class="footer-copyright text-center py-3">
-            © 2019 Copyright: Tzahi Tamam
+            Tzahi Tamam
           </div>
         </footer>
         <!-- Footer -->
@@ -382,7 +409,7 @@
             <input
               type="button"
               id="dark_mode"
-              value="Dark Mode"
+              value="Light Mode"
               class="btn btn-outline-primary btn-sm btn-block"
             />
             <h4 class="mt-2">Events</h4>
