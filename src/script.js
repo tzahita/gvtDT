@@ -1,13 +1,18 @@
 // Header Data
-const queryString = window.location.search;
-window.myUrlUs = "//cdn.dynamicyield.com/api/";
-window.myUrlEu = "//cdn-eu.dynamicyield.com/api/";
-window.DY = window.DY || {};
 const intervalDYO = setInterval(checkDYO, 1000);
 const intervalDY = setInterval(checkDY, 1000);
 const endIntervalDYO = 10;
 const endIntervalDY = 10;
 let counter = 0;
+const queryString = window.location.search;
+
+window.myUrlUs = "//cdn.dynamicyield.com/api/";
+window.myUrlEu = "//cdn-eu.dynamicyield.com/api/";
+window.DY = window.DY || {};
+
+// if (!sessionStorage.getItem("location") == "us") {
+//   sessionStorage.setItem("location", "us");
+// }
 
 function init() {
   $("#contextDD").change(checkIfDataNeeded);
@@ -15,27 +20,42 @@ function init() {
   $("#sendOptOut").on("click", optOut);
   $("#changeSection").on("click", changeSection);
   $("#changeContext").on("click", changeContext);
+  $("#changeLngButton").on("click", changeLngContext);
   $("#purchase").on("click", purchase);
   $("#addToCart").on("click", addToCart);
   $("#logIn").on("click", logIn);
-  document.getElementById("thisSectionID").innerHTML = sessionStorage.getItem(
-    "sectionID"
-  );
-  document.getElementById("thisContext").innerHTML = sessionStorage.getItem(
-    "context_type"
-  );
+  $("#dark_mode").on("click", darkMode);
+
+  if (!document.cookie) {
+    document.cookie = "dark=true";
+  }
+  document.getElementById(
+    "thisSectionID"
+  ).innerHTML = sessionStorage.getItem("sectionID");
+  document.getElementById(
+    "thisContext"
+  ).innerHTML = sessionStorage.getItem("context_type");
+  if (sessionStorage.getItem("context_lang")) {
+    document.getElementById("thisContextLang").innerHTML =
+      "Lang - " + sessionStorage.getItem("context_lang");
+  }
   if (sessionStorage.getItem("context_data")) {
     document.getElementById("thisData").innerHTML =
-      "Data - " + sessionStorage.getItem("context_data") + "<br>";
+      "Data - " + sessionStorage.getItem("context_data");
   }
 }
 
-
-
-if (searchParams("SectionId", queryString)) {
-  sessionStorage.setItem("sectionID", searchParams("SectionId", queryString));
+if (searchParams("sectionId", queryString)) {
+  sessionStorage.setItem(
+    "sectionID",
+    searchParams("sectionId", queryString)
+  );
 } else if (getParamsFromReferer()) {
-  sessionStorage.setItem("sectionID", getParamsFromReferer());
+  let param = getParamsFromReferer();
+  let hash = document.location.hash;
+  document.location.hash = hash;
+  insertParam("sectionId", param);
+  sessionStorage.setItem("sectionID", param);
 }
 
 if (sessionStorage.getItem("sectionID")) {
@@ -78,26 +98,81 @@ if (!sessionStorage.getItem("context_type")) {
   }
 }
 
-console.log(
-  (document.getElementById("api_dynamic").src =
-    window.myUrlUs + sessionStorage.getItem("sectionID") + "/api_dynamic.js")
-);
-
-console.log(
-  (document.getElementById("api_static").src =
-    window.myUrlUs + sessionStorage.getItem("sectionID") + "/api_static.js")
-);
+if (sessionStorage.getItem("sectionID")) {
+  if (getLocationFromSectionId() == "eu") {
+    sessionStorage.setItem("location", "eu");
+  } else {
+    sessionStorage.setItem("location", "us");
+  }
+}
 
 if (sessionStorage.getItem("location") == "us") {
+  console.log("us");
   document.getElementById("api_dynamic").src =
-    window.myUrlUs + sessionStorage.getItem("sectionID") + "/api_dynamic.js";
+    window.myUrlUs +
+    sessionStorage.getItem("sectionID") +
+    "/api_dynamic.js";
   document.getElementById("api_static").src =
-    window.myUrlUs + sessionStorage.getItem("sectionID") + "/api_static.js";
+    window.myUrlUs +
+    sessionStorage.getItem("sectionID") +
+    "/api_static.js";
 } else if (sessionStorage.getItem("location") == "eu") {
-  document.getElementById("api_dynamic").src =
-    window.myUrlEu + sessionStorage.getItem("sectionID") + "/api_dynamic.js";
+  console.log("eu");
   document.getElementById("api_static").src =
-    window.myUrlEu + sessionStorage.getItem("sectionID") + "/api_static.js";
+    window.myUrlEu +
+    sessionStorage.getItem("sectionID") +
+    "/api_static.js";
+  document.getElementById("api_dynamic").src =
+    window.myUrlEu +
+    sessionStorage.getItem("sectionID") +
+    "/api_dynamic.js";
+}
+
+if (getCookie("dark") == "false") {
+  document.documentElement.style.setProperty(
+    "--primary-color",
+    "#ffffff"
+  );
+  document.documentElement.style.setProperty(
+    "--secondary-color",
+    "#007bff"
+  );
+  document.documentElement.style.setProperty(
+    "--border-color",
+    "rgba(173, 165, 165, 0.493)"
+  );
+  document.documentElement.style.setProperty("--text-color", "#000000");
+  document.documentElement.style.setProperty(
+    "--buttons-color",
+    "#007bff"
+  );
+  document.getElementById("dark_mode").value = "Dark Mode";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(";");
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function darkMode() {
+  if (getCookie("dark") == "true") {
+    document.cookie = "dark=false";
+    reload();
+  } else {
+    document.cookie = "dark=true";
+    reload();
+  }
 }
 
 function searchParams(key, queryString) {
@@ -156,7 +231,7 @@ function AddToCart(obj, productStr) {
   };
 }
 
-function checkDYO() {
+async function checkDYO() {
   try {
     if (DYO) {
       printVersion();
@@ -164,12 +239,10 @@ function checkDYO() {
       clearInterval(intervalDYO);
     } else if (counter == endIntervalDYO) {
       clearInterval(intervalDYO);
+      console.log("DYO:" + counter);
     }
     counter++;
-    console.log("DYO:" + counter);
-  } catch (e) {
-    console.error(e);
-  }
+  } catch {}
 }
 
 async function checkDY() {
@@ -273,6 +346,15 @@ function sha256(str) {
   return hashedStr;
 }
 
+function changeLngContext() {
+  event.preventDefault();
+  let lang = $("#lngId").val();
+  if (lang) {
+    addToSessionStorage("context_lang", lang);
+  }
+  reload();
+}
+
 function changeContext() {
   event.preventDefault();
   let context = document.context.context.value.trim();
@@ -288,37 +370,110 @@ function changeContext() {
       type: contextUpperCase,
       data: tempSKU
     });
-  } else if (contextUpperCase == "HOMEPAGE" && contextUpperCase == "OTHER") {
+  } else if (
+    contextUpperCase == "HOMEPAGE" &&
+    contextUpperCase == "OTHER"
+  ) {
     DY.API("context", {
       type: contextUpperCase
     });
   }
+  reloadsObjectsToThePage();
+  removeFromSessionStorage("context_type");
+  removeFromSessionStorage("context_data");
+  addToSessionStorage("context_type", contextUpperCase);
+  if (contextUpperCase != "HOMEPAGE" && contextUpperCase != "OTHER") {
+    addToSessionStorage("context_data", tempSKU);
+  }
+  reload();
+  console.log(
+    `Context changed to: ${contextUpperCase} <br> Data changed to: ${SKU}`
+  );
+}
 
+function reloadsObjectsToThePage() {
   DYO.smartObject("context change API", {
     target: "dy_context_change_API",
     inline: true
-  }); //reloads objects to the page after context change API call has been made, useful for testing single page applications features.
-  sessionStorage.removeItem("context_type");
-  sessionStorage.removeItem("context_data");
-  sessionStorage.setItem("context_type", contextUpperCase);
-  if (contextUpperCase != "HOMEPAGE" && contextUpperCase != "OTHER") {
-    sessionStorage.setItem("context_data", tempSKU);
-  }
+  });
+}
+
+function removeFromSessionStorage(key) {
+  sessionStorage.removeItem(key);
+}
+
+function addToSessionStorage(key, value) {
+  sessionStorage.setItem(key, value);
+}
+
+function reload() {
   location.reload();
-  console.log(
-    "Context changed to: " + contextUpperCase + "<br>Data changed to: " + SKU
-  );
 }
 
 function changeSection() {
   event.preventDefault();
   let newSectionID = document.ChangeSection.sectionID.value.trim();
+  let originalURL = document.location.href;
+  let alteredURL = removeParam("sectionId", originalURL);
   sessionStorage.clear();
   localStorage.clear();
-  sessionStorage.setItem("sectionID", newSectionID);
-  sessionStorage.setItem("location", document.ChangeSection.location.value);
-  location.reload();
-  console.log("Section changed to: " + newSectionID);
+
+  addToSessionStorage("sectionID", newSectionID);
+  let locationBySection = getLocationFromSectionId();
+  console.log(locationBySection);
+  addToSessionStorage("location", locationBySection);
+  console.log(`Section changed to: ${newSectionID}`);
+  insertParam("sectionId", newSectionID);
+}
+
+function getLocationFromSectionId() {
+  if (sessionStorage.getItem("sectionID").charAt(0) == "9") {
+    return "eu";
+  } else {
+    return "us";
+  }
+}
+
+function removeParam(key, sourceURL) {
+  var rtn = sourceURL.split("?")[0],
+    param,
+    params_arr = [],
+    queryString =
+    sourceURL.indexOf("?") !== -1 ? sourceURL.split("?")[1] : "";
+  if (queryString !== "") {
+    params_arr = queryString.split("&");
+    for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+      param = params_arr[i].split("=")[0];
+      if (param === key) {
+        params_arr.splice(i, 1);
+      }
+    }
+    rtn = rtn + "?" + params_arr.join("&");
+  }
+  return rtn;
+}
+
+function insertParam(key, value) {
+  key = encodeURI(key);
+  value = encodeURI(value);
+  var kvp = document.location.search.substr(1).split("&");
+  var i = kvp.length;
+  var x;
+
+  while (i--) {
+    x = kvp[i].split("=");
+    if (x[0] == key) {
+      x[1] = value;
+      kvp[i] = x.join("=");
+      break;
+    }
+  }
+
+  if (i < 0) {
+    kvp[kvp.length] = [key, value].join("=");
+  }
+
+  document.location.search = kvp.join("&");
 }
 
 function logIn() {
@@ -344,21 +499,20 @@ function splitByComma(str) {
 }
 
 function snackbar(str) {
-  // Get the snackbar DIV
-  var x = document.getElementById("snackbar");
+  let snackbar = document.getElementById("snackbar");
 
-  // Add the "show" class to DIV
-  x.className = "show";
-  document.getElementById("snackbar").innerHTML = str;
-  // After 3 seconds, remove the show class from DIV
+  snackbar.className = "show";
+  snackbar.innerHTML = str;
+
   setTimeout(function () {
-    x.className = x.className.replace("show", "");
+    snackbar.className = snackbar.className.replace("show", "");
   }, 3000);
   console.log(str);
 }
 
 function printVersion() {
-  document.getElementById("thisScriptVersion").innerHTML = window.DYO.version;
+  document.getElementById("thisScriptVersion").innerHTML =
+    window.DYO.version;
 }
 
 function printDyid() {
@@ -377,12 +531,19 @@ function checkIfDataNeeded() {
 }
 
 async function getAudience() {
-  let audiences = DY.ServerUtil.getUserAudiences();
-  let sharedAudiences = DY.shrAud;
-  let audienceForURL = audiences.toString().replace(/,/g, ".");
+  let audiences = '';
+  let audienceForURL = '';
+  let sharedAudiences = '';
+  try {
+    audiences = DY.ServerUtil.getUserAudiences();
+    sharedAudiences = DY.shrAud;
+    audienceForURL = audiences.toString().replace(/,/g, ".");
+  } catch {
+    console.log("No section ID");
+  }
   let resToPrint = "";
-  sessionStorage.setItem("audiences", audienceForURL);
-  sessionStorage.setItem("shared_audiences", sharedAudiences);
+  addToSessionStorage("audiences", audienceForURL);
+  addToSessionStorage("shared_audiences", sharedAudiences);
 
   if (sessionStorage.getItem("location") == "us") {
     try {
@@ -403,10 +564,12 @@ async function getAudience() {
           aud.shared.forEach(element => {
             resToPrint += `<div>${element.name}</div>`;
           });
-          document.getElementById("printAudiences").innerHTML = resToPrint;
+          document.getElementById(
+            "printAudiences"
+          ).innerHTML = resToPrint;
         });
-    } catch (e) {
-      console.error(e);
+    } catch {
+      console.log("You are not logged in to the admin a DY admin user");
     }
   } else if (sessionStorage.getItem("location") == "eu") {
     try {
@@ -427,10 +590,12 @@ async function getAudience() {
           aud.shared.forEach(element => {
             resToPrint += `<div>${element.name}</div>`;
           });
-          document.getElementById("printAudiences").innerHTML = resToPrint;
+          document.getElementById(
+            "printAudiences"
+          ).innerHTML = resToPrint;
         });
-    } catch (e) {
-      console.error(e);
+    } catch {
+      console.log("You are not logged in to the admin a DY admin user");
     }
   }
 }
