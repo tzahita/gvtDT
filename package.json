@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Test website",
   "keywords": [],
-  "homepage": "https://tzahita.github.io/gvtDT/",
+  "homepage": "//gvt.co.il",
   "main": "site/index.html",
   "scripts": {
     "start": "live-server --open=site --port=5000",
