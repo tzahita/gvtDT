@@ -23,18 +23,19 @@ function init() {
   $("#changeLngButton").on("click", changeLngContext);
   $("#purchase").on("click", purchase);
   $("#addToCart").on("click", addToCart);
+  $("#clearCart").on("click", clearCart);
   $("#logIn").on("click", logIn);
   $("#dark_mode").on("click", darkMode);
 
   if (!document.cookie) {
     document.cookie = "dark=true";
   }
-  document.getElementById(
-    "thisSectionID"
-  ).innerHTML = sessionStorage.getItem("sectionID");
-  document.getElementById(
-    "thisContext"
-  ).innerHTML = sessionStorage.getItem("context_type");
+  document.getElementById("thisSectionID").innerHTML = sessionStorage.getItem(
+    "sectionID"
+  );
+  document.getElementById("thisContext").innerHTML = sessionStorage.getItem(
+    "context_type"
+  );
   if (sessionStorage.getItem("context_lang")) {
     document.getElementById("thisContextLang").innerHTML =
       "Lang - " + sessionStorage.getItem("context_lang");
@@ -43,13 +44,11 @@ function init() {
     document.getElementById("thisData").innerHTML =
       "Data - " + sessionStorage.getItem("context_data");
   }
+  printCart();
 }
 
 if (searchParams("sectionId", queryString)) {
-  sessionStorage.setItem(
-    "sectionID",
-    searchParams("sectionId", queryString)
-  );
+  sessionStorage.setItem("sectionID", searchParams("sectionId", queryString));
 } else if (getParamsFromReferer()) {
   let param = getParamsFromReferer();
   let hash = document.location.hash;
@@ -109,43 +108,26 @@ if (sessionStorage.getItem("sectionID")) {
 if (sessionStorage.getItem("location") == "us") {
   console.log("us");
   document.getElementById("api_dynamic").src =
-    window.myUrlUs +
-    sessionStorage.getItem("sectionID") +
-    "/api_dynamic.js";
+    window.myUrlUs + sessionStorage.getItem("sectionID") + "/api_dynamic.js";
   document.getElementById("api_static").src =
-    window.myUrlUs +
-    sessionStorage.getItem("sectionID") +
-    "/api_static.js";
+    window.myUrlUs + sessionStorage.getItem("sectionID") + "/api_static.js";
 } else if (sessionStorage.getItem("location") == "eu") {
   console.log("eu");
   document.getElementById("api_static").src =
-    window.myUrlEu +
-    sessionStorage.getItem("sectionID") +
-    "/api_static.js";
+    window.myUrlEu + sessionStorage.getItem("sectionID") + "/api_static.js";
   document.getElementById("api_dynamic").src =
-    window.myUrlEu +
-    sessionStorage.getItem("sectionID") +
-    "/api_dynamic.js";
+    window.myUrlEu + sessionStorage.getItem("sectionID") + "/api_dynamic.js";
 }
 
 if (getCookie("dark") == "false") {
-  document.documentElement.style.setProperty(
-    "--primary-color",
-    "#ffffff"
-  );
-  document.documentElement.style.setProperty(
-    "--secondary-color",
-    "#007bff"
-  );
+  document.documentElement.style.setProperty("--primary-color", "#ffffff");
+  document.documentElement.style.setProperty("--secondary-color", "#007bff");
   document.documentElement.style.setProperty(
     "--border-color",
     "rgba(173, 165, 165, 0.493)"
   );
   document.documentElement.style.setProperty("--text-color", "#000000");
-  document.documentElement.style.setProperty(
-    "--buttons-color",
-    "#007bff"
-  );
+  document.documentElement.style.setProperty("--buttons-color", "#007bff");
   document.getElementById("dark_mode").value = "Dark Mode";
 }
 
@@ -270,50 +252,84 @@ function isEmptyStr(str) {
 
 function purchase() {
   event.preventDefault();
-  let skuStr = document.purchase.product01.value.trim();
-  var str = skuStr.split(", ");
-  let obj = [];
+  // let skuStr = document.purchase.product01.value.trim();
+  // var str = skuStr.split(", ");
+  let obj = JSON.parse(sessionStorage.getItem("cart"));
+  let totalCart = 0;
+  // for (var i = 0; i < str.length; i++) {
+  //   obj.push({
+  //     productId: str[i],
+  //     quantity: 1,
+  //     itemPrice: 45.0
+  //   });
+  // }
 
-  for (var i = 0; i < str.length; i++) {
-    obj.push({
-      productId: str[i],
-      quantity: 1,
-      itemPrice: 45.0
-    });
+  for (const key in obj) {
+    totalCart += Number(obj[key].itemPrice);
   }
-
+  console.log(totalCart);
   const purchaseObj = new Purchase(obj);
-  document.purchase.reset();
+  // document.purchase.reset();
 
   if (window.confirm("Do you want to fire this event?")) {
     DY.API("event", purchaseObj);
-    snackbar("Purchased SKU: " + skuStr);
+    snackbar("Purchased");
     $(".toast").toast("show");
   }
+  sessionStorage.removeItem("cart");
+  printCart();
   console.log(purchaseObj);
 }
 
 function addToCart() {
   event.preventDefault();
-  let skuStr = document.addToCart.product02.value;
-  let obj = [];
-  var str = skuStr.split(", ");
-  for (var i = 0; i < str.length; i++) {
-    obj.push({
-      productId: str[i],
-      quantity: 2,
-      itemPrice: 12.34
-    });
+  let skuStr = document.addToCart.product02.value.trim();
+  let price = document.addToCart.product02Price.value.trim();
+  let str = skuStr.split(", ");
+  let cartObj;
+  if (sessionStorage.getItem("cart")) {
+    cartObj = JSON.parse(sessionStorage.getItem("cart"));
+  } else {
+    cartObj = [];
   }
 
-  const addToCartObj = new AddToCart(obj, str);
-  document.addToCart.reset();
-  if (window.confirm("Do you want to fire this event?")) {
-    DY.API("event", addToCartObj);
-    snackbar("Add to cart SKU: " + skuStr);
-    $(".toast").toast("show");
+  for (var i = 0; i < str.length; i++) {
+    cartObj.push({
+      productId: str[i],
+      quantity: 1,
+      itemPrice: price
+    });
   }
+  addToSessionStorage("cart", JSON.stringify(cartObj));
+  const addToCartObj = new AddToCart(cartObj, str);
+  document.addToCart.reset();
+
+  DY.API("event", addToCartObj);
+  snackbar("Add to cart SKU: " + skuStr);
+  $(".toast").toast("show");
+  printCart();
   console.log(addToCartObj);
+}
+
+function printCart() {
+  let cart = JSON.parse(sessionStorage.getItem("cart"));
+  let resToPrint = "<tr><th>SKU</th><th>Price</th></tr>";
+  try {
+    cart.forEach(element => {
+      resToPrint += `
+  <tr><td>${element.productId}</td><td> ${element.itemPrice}$ </td></tr>`;
+    });
+  } catch {
+    console.log("cart is empty")
+  } finally {
+    document.getElementById("cartList").innerHTML = resToPrint;
+  }
+}
+
+function clearCart() {
+  event.preventDefault;
+  sessionStorage.removeItem("cart");
+  printCart();
 }
 
 function optIn() {
@@ -370,10 +386,7 @@ function changeContext() {
       type: contextUpperCase,
       data: tempSKU
     });
-  } else if (
-    contextUpperCase == "HOMEPAGE" &&
-    contextUpperCase == "OTHER"
-  ) {
+  } else if (contextUpperCase == "HOMEPAGE" && contextUpperCase == "OTHER") {
     DY.API("context", {
       type: contextUpperCase
     });
@@ -438,8 +451,7 @@ function removeParam(key, sourceURL) {
   var rtn = sourceURL.split("?")[0],
     param,
     params_arr = [],
-    queryString =
-    sourceURL.indexOf("?") !== -1 ? sourceURL.split("?")[1] : "";
+    queryString = sourceURL.indexOf("?") !== -1 ? sourceURL.split("?")[1] : "";
   if (queryString !== "") {
     params_arr = queryString.split("&");
     for (var i = params_arr.length - 1; i >= 0; i -= 1) {
@@ -511,8 +523,7 @@ function snackbar(str) {
 }
 
 function printVersion() {
-  document.getElementById("thisScriptVersion").innerHTML =
-    window.DYO.version;
+  document.getElementById("thisScriptVersion").innerHTML = window.DYO.version;
 }
 
 function printDyid() {
@@ -531,9 +542,9 @@ function checkIfDataNeeded() {
 }
 
 async function getAudience() {
-  let audiences = '';
-  let audienceForURL = '';
-  let sharedAudiences = '';
+  let audiences = "";
+  let audienceForURL = "";
+  let sharedAudiences = "";
   try {
     audiences = DY.ServerUtil.getUserAudiences();
     sharedAudiences = DY.shrAud;
@@ -564,9 +575,7 @@ async function getAudience() {
           aud.shared.forEach(element => {
             resToPrint += `<div>${element.name}</div>`;
           });
-          document.getElementById(
-            "printAudiences"
-          ).innerHTML = resToPrint;
+          document.getElementById("printAudiences").innerHTML = resToPrint;
         });
     } catch {
       console.log("You are not logged in to the admin a DY admin user");
@@ -590,9 +599,7 @@ async function getAudience() {
           aud.shared.forEach(element => {
             resToPrint += `<div>${element.name}</div>`;
           });
-          document.getElementById(
-            "printAudiences"
-          ).innerHTML = resToPrint;
+          document.getElementById("printAudiences").innerHTML = resToPrint;
         });
     } catch {
       console.log("You are not logged in to the admin a DY admin user");
